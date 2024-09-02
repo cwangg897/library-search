@@ -1,12 +1,17 @@
 package com.library.feign;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.library.ApiException;
+import com.library.ErrorType;
 import com.library.NaverErrorResponse;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 
+@Slf4j
 public class NaverErrorDecoder implements ErrorDecoder {
 
     private final ObjectMapper objectMapper;
@@ -25,9 +30,13 @@ public class NaverErrorDecoder implements ErrorDecoder {
                 StandardCharsets.UTF_8);
             NaverErrorResponse naverErrorResponse = objectMapper.readValue(body,
                 NaverErrorResponse.class);// 여기서 이렇게 매핑하면 NaverErrorResponse이 나온다
-            throw new RuntimeException(naverErrorResponse.getErrorMessage());
-        } catch (IOException e) { // 파싱 실패시에도
-            throw new RuntimeException(e);
+            throw new ApiException(naverErrorResponse.getErrorMessage(), ErrorType.EXTERNAL_API_ERROR,
+                HttpStatus.valueOf(response.status()));
+        } catch (IOException e) {
+            log.error("[Naver] 에러 메시지 파싱 에러 code={}, request={}, errorMessage={}",
+                response.status(), response.request(), e.getMessage());
+            throw new ApiException("네이버 메시지 파싱에러", ErrorType.EXTERNAL_API_ERROR,
+                HttpStatus.valueOf(response.status()));
         }
     }
 }
