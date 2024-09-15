@@ -6,6 +6,6 @@ external:
   naver:
     url: https://openapi.naver.com
     headers:
-      client-id: LJrJ8AJRvSvn_t8bGjWJ
-      client-secret: eVtaoOJV61
+      client-id: {client-id}
+      client-secret: {client-secret}
 
