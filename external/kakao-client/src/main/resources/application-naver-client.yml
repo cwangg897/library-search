@@ -6,4 +6,4 @@ external:
   kakao:
     url: https://dapi.kakao.com
     headers:
-      rest-api-key: 9fce9696b60f48c4672a0f51e5cc50c5
+      rest-api-key: {rest-api-key}
