@@ -1,1 +1,11 @@
 jar.enabled = true
+
+subprojects {
+    dependencies {
+        implementation project(':common')
+        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
+        api 'org.springframework.cloud:spring-cloud-starter-openfeign'
+        // 버전간 충돌때문에 손쉽게 관리위해 의존성 관리 수단 제공해줌
+    }
+}
+
